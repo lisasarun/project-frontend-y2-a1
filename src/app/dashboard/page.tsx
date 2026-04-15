@@ -5,6 +5,8 @@ import Link from "next/link";
 import CourseCard from "../components/CourseCard";
 import ProgressChart from "../components/ProgressChart";
 import LearningStreak from "../components/LearningStreak";
+import { courses } from "@/lib/elearn-data";
+import QuizModule from "../components/QuizModule";
 
 type DashboardCourse = {
   id: number;
@@ -38,11 +40,25 @@ const fallbackDashboardData: DashboardData = {
     name: "Student",
     membership: "Pro Student",
   },
-  myCourses: [],
+  myCourses: [
+    {
+      id: 1,
+      title: "Full-stack Java Development",
+      level: "Advanced",
+      track: "Web Development",
+      mentor: "Monytrey",
+      rating: "5.0",
+      learners: "1.2k",
+      progress: 45,
+      description: "Learn Java with Spring Boot and React.",
+      lessons: "12 lessons",
+      duration: "4 hours"
+    }
+  ],
   stats: {
-    activeCourses: 0,
-    averageProgress: 0,
-    lessonsLeft: 0,
+    activeCourses: 1,
+    averageProgress: 45,
+    lessonsLeft: 12,
   },
 };
 
@@ -65,9 +81,11 @@ function readStoredName() {
   }
 }
 
+
 export default function DashboardPage() {
-  const [dashboardData, setDashboardData] =
-    useState<DashboardData>(fallbackDashboardData);
+  const [dashboardData, setDashboardData] = useState<DashboardData>(
+    fallbackDashboardData,
+  );
   const [loading, setLoading] = useState(true);
   const [currentStreak, setCurrentStreak] = useState(7); // Mock streak data
 
@@ -120,7 +138,18 @@ export default function DashboardPage() {
     };
   }, []);
 
-  const StatCard = ({ icon, value, label, color }: { icon: string; value: string | number; label: string; color: string }) => (
+const StatCard = ({ icon, value, label, color }: { icon: string; value: string | number; label: string; color: string }) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <div className={`rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm ${color} opacity-0`}></div>;
+  }
+
+  return (
     <div className={`rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm ${color}`}>
       <div className="flex items-center gap-3">
         <div className="text-2xl">{icon}</div>
@@ -131,13 +160,34 @@ export default function DashboardPage() {
       </div>
     </div>
   );
+};
 
-  const AchievementBadge = ({ icon, title, description, earned }: { icon: string; title: string; description: string; earned: boolean }) => (
-    <div className={`rounded-xl border p-4 transition-all ${earned ? 'border-yellow-200 bg-yellow-50' : 'border-slate-200 bg-slate-50'}`}>
+  const AchievementBadge = ({
+    icon,
+    title,
+    description,
+    earned,
+  }: {
+    icon: string;
+    title: string;
+    description: string;
+    earned: boolean;
+  }) => (
+    <div
+      className={`rounded-xl border p-4 transition-all ${earned ? "border-yellow-200 bg-yellow-50" : "border-slate-200 bg-slate-50"}`}
+    >
       <div className="flex items-center gap-3">
-        <div className={`text-2xl ${earned ? 'text-yellow-600' : 'text-slate-400'}`}>{icon}</div>
+        <div
+          className={`text-2xl ${earned ? "text-yellow-600" : "text-slate-400"}`}
+        >
+          {icon}
+        </div>
         <div>
-          <p className={`font-semibold ${earned ? 'text-slate-900' : 'text-slate-500'}`}>{title}</p>
+          <p
+            className={`font-semibold ${earned ? "text-slate-900" : "text-slate-500"}`}
+          >
+            {title}
+          </p>
           <p className="text-sm text-slate-500">{description}</p>
         </div>
       </div>
@@ -164,8 +214,8 @@ export default function DashboardPage() {
                   Welcome back, {dashboardData.user.name}! 👋
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-200 md:text-base">
-                  Track your progress, continue your lessons, and achieve your learning goals.
-                  You're doing amazing!
+                  Track your progress, continue your lessons, and achieve your
+                  learning goals. You're doing amazing!
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
@@ -191,7 +241,9 @@ export default function DashboardPage() {
                   <div className="flex items-center gap-3 mb-2">
                     <div className="text-2xl">📈</div>
                     <div>
-                      <p className="text-2xl font-bold">{dashboardData.stats.averageProgress}%</p>
+                      <p className="text-2xl font-bold">
+                        {dashboardData.stats.averageProgress}%
+                      </p>
                       <p className="text-sm text-slate-200">Avg Progress</p>
                     </div>
                   </div>
@@ -219,7 +271,10 @@ export default function DashboardPage() {
 
           {/* Quick Actions */}
           <section>
-            <h2 className="mb-4 text-xl font-bold text-slate-900">Quick Actions</h2>
+            <QuizModule />
+            <h2 className="mb-4 text-xl font-bold text-slate-900">
+              Quick Actions
+            </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <Link
                 href="/Courses"
@@ -279,7 +334,9 @@ export default function DashboardPage() {
 
           {/* Achievements */}
           <section>
-            <h2 className="mb-4 text-xl font-bold text-slate-900">Recent Achievements</h2>
+            <h2 className="mb-4 text-xl font-bold text-slate-900">
+              Recent Achievements
+            </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <AchievementBadge
                 icon="🎯"
@@ -306,8 +363,12 @@ export default function DashboardPage() {
           <section>
             <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-sm font-semibold text-indigo-600">Continue learning</p>
-                <h2 className="text-2xl font-bold text-slate-900">My Active Courses</h2>
+                <p className="text-sm font-semibold text-indigo-600">
+                  Continue learning
+                </p>
+                <h2 className="text-2xl font-bold text-slate-900">
+                  My Active Courses
+                </h2>
               </div>
               <div className="flex items-center gap-4">
                 <p className="text-sm text-slate-500">
@@ -327,8 +388,12 @@ export default function DashboardPage() {
             {dashboardData.myCourses.length === 0 ? (
               <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center">
                 <div className="text-6xl">📚</div>
-                <h3 className="mt-4 text-lg font-semibold text-slate-900">No active courses yet</h3>
-                <p className="mt-2 text-slate-500">Start your learning journey by enrolling in a course.</p>
+                <h3 className="mt-4 text-lg font-semibold text-slate-900">
+                  No active courses yet
+                </h3>
+                <p className="mt-2 text-slate-500">
+                  Start your learning journey by enrolling in a course.
+                </p>
                 <Link
                   href="/Courses"
                   className="mt-6 inline-block rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
@@ -337,55 +402,41 @@ export default function DashboardPage() {
                 </Link>
               </div>
             ) : (
-              <div className="grid gap-6 lg:grid-cols-2">
-                {dashboardData.myCourses.map((course) => (
-                  <div key={course.id} className="space-y-4">
-                    <CourseCard
-                      id={course.id}
-                      title={course.title}
-                      level={course.level}
-                      description={course.description}
-                      track={course.track}
-                      duration={course.duration}
-                      lessons={course.lessons}
-                      mentor={course.mentor}
-                      rating={course.rating}
-                      learners={course.learners}
-                      ctaLabel="Continue Learning"
-                    />
-
-                    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="font-semibold text-slate-700">Progress</span>
-                        <span className="font-bold text-indigo-600">{course.progress}%</span>
-                      </div>
-
-                      <div className="h-3 rounded-full bg-slate-100 mb-3">
-                        <div
-                          className="h-3 rounded-full bg-linear-to-r from-cyan-500 to-indigo-600 transition-all duration-500"
-                          style={{ width: `${course.progress}%` }}
-                        />
-                      </div>
-
-                      <div className="flex items-center justify-between text-sm text-slate-500">
-                        <span>{course.lessons} remaining</span>
-                        <span>{course.duration} left</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+  dashboardData.myCourses.map((course) => (
+    <div key={course.id} className="space-y-4">
+      <Link href={`/dashboard/${course.id}`}>
+        <CourseCard
+          id={course.id}
+          title={course.title}
+          level={course.level}
+          description={course.description}
+          track={course.track}
+          duration={course.duration}
+          lessons={course.lessons}
+          mentor={course.mentor}
+          rating={course.rating}
+          learners={course.learners}
+          ctaLabel="Continue Learning"
+        />
+      </Link>
+    </div>
+  )) 
+)}
           </section>
 
           {/* Learning Insights */}
           <section>
-            <h2 className="mb-4 text-xl font-bold text-slate-900">Learning Insights</h2>
+            
+            <h2 className="mb-4 text-xl font-bold text-slate-900">
+              Learning Insights
+            </h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               <LearningStreak currentStreak={currentStreak} />
 
               <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 className="font-semibold text-slate-900 mb-4">Weekly Progress</h3>
+                <h3 className="font-semibold text-slate-900 mb-4">
+                  Weekly Progress
+                </h3>
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-600">Mon</span>
@@ -411,27 +462,41 @@ export default function DashboardPage() {
               </div>
 
               <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 className="font-semibold text-slate-900 mb-4">Recommended Next</h3>
+                <h3 className="font-semibold text-slate-900 mb-4">
+                  Recommended Next
+                </h3>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="h-2 w-2 rounded-full bg-green-500"></div>
                     <div>
-                      <p className="font-medium text-slate-900">Complete React Hooks</p>
-                      <p className="text-sm text-slate-500">Next in your learning path</p>
+                      <p className="font-medium text-slate-900">
+                        Complete React Hooks
+                      </p>
+                      <p className="text-sm text-slate-500">
+                        Next in your learning path
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="h-2 w-2 rounded-full bg-blue-500"></div>
                     <div>
-                      <p className="font-medium text-slate-900">Advanced JavaScript</p>
-                      <p className="text-sm text-slate-500">Based on your interests</p>
+                      <p className="font-medium text-slate-900">
+                        Advanced JavaScript
+                      </p>
+                      <p className="text-sm text-slate-500">
+                        Based on your interests
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="h-2 w-2 rounded-full bg-purple-500"></div>
                     <div>
-                      <p className="font-medium text-slate-900">UI/UX Design Principles</p>
-                      <p className="text-sm text-slate-500">Popular in your field</p>
+                      <p className="font-medium text-slate-900">
+                        UI/UX Design Principles
+                      </p>
+                      <p className="text-sm text-slate-500">
+                        Popular in your field
+                      </p>
                     </div>
                   </div>
                 </div>

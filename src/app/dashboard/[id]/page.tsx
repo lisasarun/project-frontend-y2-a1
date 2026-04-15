@@ -2,130 +2,91 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import LessonViewer from "../../components/LessonViewer";
 import SideBar from "../../components/SideBar";
-
-type LessonItem = {
-  id: number;
-  title: string;
-  duration: string;
-  completed: boolean;
-  summary: string;
-};
-
-const fallbackLesson: LessonItem = {
-  id: 1,
-  title: "Introduction",
-  duration: "5 min",
-  completed: false,
-  summary: "Loading the lesson content for your selected course.",
-};
+import LessonViewer from "../../components/LessonViewer";
 
 export default function LearningPage() {
   const params = useParams();
-  const courseId = Number((params?.id as string) || "1");
-  const [courseTitle, setCourseTitle] = useState("Learning Path");
-  const [lessons, setLessons] = useState<LessonItem[]>([fallbackLesson]);
-  const [currentLessonId, setCurrentLessonId] = useState<number>(fallbackLesson.id);
+  const courseId = params?.id;
+  const [lessons, setLessons] = useState([]);
+  const [currentLessonId, setCurrentLessonId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    let active = true;
-
-    const loadCourse = async () => {
+    setMounted(true);
+    const fetchCourseData = async () => {
       try {
-        const response = await fetch(`/api/courses/${courseId}`, {
-          cache: "no-store",
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to load course lessons");
+        const res = await fetch(`/api/courses/${courseId}`);
+        const data = await res.json();
+        if (data.course?.lessonItems) {
+          setLessons(data.course.lessonItems);
+          setCurrentLessonId(data.course.lessonItems[0].id);
         }
-
-        const data = (await response.json()) as {
-          course?: { title?: string; lessonItems?: LessonItem[] };
-        };
-
-        const nextLessons = data.course?.lessonItems?.length
-          ? data.course.lessonItems
-          : [fallbackLesson];
-
-        if (active) {
-          setCourseTitle(data.course?.title || `Course ${courseId}`);
-          setLessons(nextLessons);
-          setCurrentLessonId(nextLessons[0].id);
-        }
-      } catch {
-        if (active) {
-          setCourseTitle(`Course ${courseId}`);
-          setLessons([fallbackLesson]);
-          setCurrentLessonId(fallbackLesson.id);
-        }
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
+      } finally { setLoading(false); }
     };
-
-    void loadCourse();
-
-    return () => {
-      active = false;
-    };
+    if (courseId) fetchCourseData();
   }, [courseId]);
 
   const currentLesson = useMemo(() => {
-    return lessons.find((lesson) => lesson.id === currentLessonId) || lessons[0];
+    return lessons.find((l) => l.id === currentLessonId) || lessons[0];
   }, [currentLessonId, lessons]);
 
-  const completedCount = lessons.filter((lesson) => lesson.completed).length;
-  const progress = Math.round((completedCount / lessons.length) * 100);
+  const progress = lessons.length > 0 
+    ? Math.round((lessons.filter(l => l.completed).length / lessons.length) * 100) 
+    : 0;
+
+  if (!mounted) return <div className="min-h-screen bg-[#F8FAFC]" />;
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-[#F8FAFC]">
       <SideBar
         lessons={lessons}
-        currentLessonId={currentLessonId}
+        currentLessonId={currentLessonId || 0}
         onSelectLesson={(id) => setCurrentLessonId(id)}
       />
 
-      <div className="flex-1 p-4 md:p-6">
-        <div className="mx-auto max-w-6xl space-y-6">
-          <section className="rounded-4xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <p className="text-sm font-semibold text-indigo-600">Learning classroom</p>
-                <h1 className="mt-1 text-3xl font-bold text-slate-900">{courseTitle}</h1>
-                <p className="mt-2 text-sm text-slate-500">
-                  {loading
-                    ? "Loading your latest lesson data..."
-                    : "Continue your lessons and complete the next milestone in your learning path."}
-                </p>
+      <div className="flex-1 flex flex-col">
+        {/* Top Header Section */}
+        <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 py-4">
+          <div className="max-w-5xl mx-auto flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">Learning Dashboard</h1>
+              <p className="text-xs text-slate-500 font-medium">Continue your programming journey [cite: 8]</p>
+            </div>
+            
+            <div className="flex items-center gap-6">
+              <div className="text-right hidden sm:block">
+                <p className="text-sm font-bold text-indigo-600">{progress}% Completed [cite: 57]</p>
+                <div className="w-40 h-2 bg-slate-100 rounded-full mt-1.5 overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-700" 
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
               </div>
-
-              <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm">
-                  <p className="font-semibold text-slate-900">{progress}%</p>
-                  <p className="text-slate-500">progress</p>
-                </div>
-                <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm">
-                  <p className="font-semibold text-slate-900">{completedCount}/{lessons.length}</p>
-                  <p className="text-slate-500">completed</p>
-                </div>
-                <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm">
-                  <p className="font-semibold text-slate-900">{currentLesson.duration}</p>
-                  <p className="text-slate-500">current lesson</p>
-                </div>
+              <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold shadow-lg">
+                YW
               </div>
             </div>
-          </section>
+          </div>
+        </header>
 
-          <LessonViewer
-            lessonTitle={currentLesson.title}
-            lessonSummary={currentLesson.summary}
-          />
-        </div>
+        <main className="p-8">
+          <div className="max-w-5xl mx-auto">
+            {loading ? (
+              <div className="flex flex-col items-center justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                <p className="mt-4 text-slate-500 font-medium italic">Preparing your classroom...</p>
+              </div>
+            ) : currentLesson && (
+              <LessonViewer 
+                lessonTitle={currentLesson.title} 
+                lessonSummary={currentLesson.summary} 
+              />
+            )}
+          </div>
+        </main>
       </div>
     </div>
   );

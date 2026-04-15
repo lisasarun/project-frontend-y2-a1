@@ -1,48 +1,66 @@
-type LessonViewerProps = {
-  lessonTitle?: string;
-  lessonSummary?: string;
-};
+"use client";
+import { useState } from "react";
+import QuizModule from "./QuizModule";
 
-export default function LessonViewer({
-  lessonTitle = "Lesson Content",
-  lessonSummary = "Watch the lesson, review the notes, and complete the quick exercise to continue.",
-}: LessonViewerProps) {
+export default function LessonViewer({ lessonTitle, lessonSummary }) {
+  const [showQuiz, setShowQuiz] = useState(false);
+
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-        <div>
-          <p className="text-sm font-semibold text-indigo-600">Current lesson</p>
-          <h2 className="text-2xl font-bold text-slate-900">{lessonTitle}</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-            {lessonSummary}
-          </p>
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden">
+        {/* Banner Section */}
+        <div className="bg-gradient-to-r from-slate-900 to-slate-800 p-10 text-white">
+          <span className="px-3 py-1 bg-indigo-500/20 border border-indigo-500/30 rounded-full text-[10px] font-bold uppercase tracking-widest text-indigo-300">
+            Current Module
+          </span>
+          <h2 className="text-3xl font-black mt-4">{lessonTitle}</h2>
         </div>
 
-        <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-          In progress
-        </span>
-      </div>
+        <div className="p-10">
+          {/* Lesson Content Section */}
+          <div className="prose prose-slate max-w-none">
+            <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+              <span className="h-2 w-2 bg-indigo-600 rounded-full"></span>
+              Lesson Content
+            </h3>
+            <div className="bg-slate-50 rounded-3xl p-8 border border-slate-100 text-slate-700 leading-relaxed shadow-inner">
+              {lessonSummary || "No content available for this lesson."}
+              <div className="mt-6 flex items-center gap-2 text-[10px] text-slate-400 font-mono">
+                <span>Reading materials (PDF, text)</span>
+              </div>
+            </div>
+          </div>
 
-      <div className="mt-5 flex aspect-video w-full items-center justify-center rounded-2xl bg-slate-950 text-white">
-        <div className="text-center">
-          <p className="text-4xl">▶</p>
-          <p className="mt-2 text-sm text-slate-300">Video / PDF learning area</p>
+          {/* Quiz Section - កែសម្រួលត្រង់នេះបាទ! */}
+          <div className="mt-12 pt-10 border-t border-slate-100">
+            {!showQuiz ? (
+              <div className="bg-indigo-50 rounded-[2rem] p-8 flex flex-col md:flex-row items-center justify-between gap-6 border border-indigo-100">
+                <div className="text-center md:text-left">
+                  <h4 className="text-xl font-bold text-indigo-900">Ready to test your knowledge?</h4>
+                  <p className="text-indigo-600/70 text-sm mt-1">Complete this quiz to unlock the next milestone.</p>
+                </div>
+                <button 
+                  onClick={() => setShowQuiz(true)}
+                  className="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow-lg shadow-indigo-200 transition-all active:scale-95"
+                >
+                  Start Quiz Now
+                </button>
+              </div>
+            ) : (
+              <div className="bg-white rounded-[2rem] border-2 border-indigo-600 p-8">
+                {/* ហៅ QuizModule មកប្រើដើម្បីទាញសំណួរពិតពី Java Backend */}
+                <QuizModule /> 
+                
+                <button 
+                  onClick={() => setShowQuiz(false)}
+                  className="mt-4 text-sm text-slate-500 hover:text-indigo-600 underline"
+                >
+                  Back to Lesson Content
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-
-      <div className="mt-5 grid gap-3 md:grid-cols-3">
-        <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">📌 Key concepts explained clearly</div>
-        <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">🧩 Practice task included</div>
-        <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">✅ Mark complete when finished</div>
-      </div>
-
-      <div className="mt-6 flex flex-wrap gap-3">
-        <button className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700">
-          Mark as Complete
-        </button>
-        <button className="rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-          Download Notes
-        </button>
       </div>
     </div>
   );
