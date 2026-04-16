@@ -10,6 +10,10 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { createAuthClient } from "better-auth/react";
 import { authClient } from "@/lib/auth-client";
+import { CardFooter } from "@/app/components/card";
+import { Button } from "@/app/components/button";
+import { Field } from "@/app/components/field";
+import { signInSocial } from "@/lib/action/auth-action";
 
 // 1. បង្កើត Schema ឱ្យស៊ីគ្នាជាមួយ Backend (Java)
 const registerSchema = z.object({
@@ -26,13 +30,18 @@ type RegisterSchema = z.infer<typeof registerSchema>;
 
 //better-auth
 
-const handleSocialLogin = async (provider: "github" | "google") => {
-  const data = await authClient.signIn.social({
-    // វានឹងឈប់ Error ទៀតហើយ
-    provider: provider,
-    callbackURL: "/dashboard",
-  });
-};
+// const handleSocialLogin = async (provider: "github" | "google") => {
+//   const data = await authClient.signIn.social({
+//     // វានឹងឈប់ Error ទៀតហើយ
+//     provider: provider,
+//     callbackURL: "/dashboard",
+//   });
+// };
+
+async function handleSocialAuth(provider: "github" | "google") {
+  await signInSocial(provider);
+}
+
 export default function RegisterPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -110,6 +119,7 @@ export default function RegisterPage() {
                 <input
                   {...register("fullName")}
                   className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none"
+                  placeholder="student"
                 />
                 {errors.fullName && (
                   <p className="text-red-400 text-xs mt-1">
@@ -125,6 +135,7 @@ export default function RegisterPage() {
                 <input
                   {...register("email")}
                   className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none"
+                  placeholder="student@gmail.com"
                 />
                 {errors.email && (
                   <p className="text-red-400 text-xs mt-1">
@@ -141,6 +152,7 @@ export default function RegisterPage() {
                   type="password"
                   {...register("password")}
                   className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none"
+                  placeholder="Enter your Password"
                 />
                 {errors.password && (
                   <p className="text-red-400 text-xs mt-1">
@@ -178,15 +190,21 @@ export default function RegisterPage() {
                 )}
               </div>
 
-              <CardFooter>
-                <Field>
+              <CardFooter className="flex justify-center p-0 bg-transparent border-none">
+                {/* ប្តូរមកប្រើ flex-col ដើម្បីឱ្យវាជង់លើគ្នា និង w-full ដើម្បីឱ្យប៊ូតុងរីកស្មើគ្នា */}
+                <Field className="flex flex-col gap-3 w-full items-center bg-transparent">
+                  {/* ប៊ូតុង Google */}
                   <Button
                     onClick={() => handleSocialAuth("google")}
-                    // disabled={isLoading}
                     variant="outline"
                     type="button"
+                    className="w-full max-w-[300px] rounded-2xl border-slate-300 bg-white text-black hover:bg-slate-100 transition-all"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <svg
+                      className="w-5 h-5 mr-2"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
                         fill="currentColor"
@@ -194,14 +212,16 @@ export default function RegisterPage() {
                     </svg>
                     Login with Google
                   </Button>
+
+                  {/* ប៊ូតុង GitHub */}
                   <Button
                     onClick={() => handleSocialAuth("github")}
-                    // disabled={isLoading}
                     variant="outline"
                     type="button"
+                    className="w-full max-w-[300px] rounded-2xl border-slate-300 bg-white text-black hover:bg-slate-100 transition-all"
                   >
                     <svg
-                      className="w-5 h-5 mr-3"
+                      className="w-5 h-5 mr-2"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >

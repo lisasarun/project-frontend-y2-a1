@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "../auth";
 import { headers } from "next/headers";
 
-export async function signInSocial(provider: "google") {
+export async function signInSocial(provider: "google" | "github") {
     const {url} = await auth.api.signInSocial({
         body: {
             provider,
