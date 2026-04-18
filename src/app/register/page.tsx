@@ -1,42 +1,27 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
-import { createAuthClient } from "better-auth/react";
-import { authClient } from "@/lib/auth-client";
 import { CardFooter } from "@/app/components/card";
 import { Button } from "@/app/components/button";
 import { Field } from "@/app/components/field";
 import { signInSocial } from "@/lib/action/auth-action";
 
-// 1. បង្កើត Schema ឱ្យស៊ីគ្នាជាមួយ Backend (Java)
 const registerSchema = z.object({
   fullName: z.string().min(3, "Full name is too short"),
   email: z.string().email("Invalid email format"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   goal: z.string(),
-  acceptedTerms: z.literal(true, {
-    errorMap: () => ({ message: "Please accept terms" }),
+  acceptedTerms: z.boolean().refine((val) => val === true, {
+    message: "Please accept terms",
   }),
 });
 
 type RegisterSchema = z.infer<typeof registerSchema>;
-
-//better-auth
-
-// const handleSocialLogin = async (provider: "github" | "google") => {
-//   const data = await authClient.signIn.social({
-//     // វានឹងឈប់ Error ទៀតហើយ
-//     provider: provider,
-//     callbackURL: "/dashboard",
-//   });
-// };
 
 async function handleSocialAuth(provider: "github" | "google") {
   await signInSocial(provider);
@@ -83,10 +68,9 @@ export default function RegisterPage() {
 
   return (
     <>
-      <Navbar />
-      <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
+      <main className="min-h-screen px-4 py-8 md:px-6">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          {/* Section ឆ្វេង (ព័ត៌មាន) - រក្សារូបរាងដើម */}
+          {/* Information Section */}
           <section className="rounded-4xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
               Join E-Learn
@@ -99,7 +83,7 @@ export default function RegisterPage() {
             </p>
           </section>
 
-          {/* Section ស្ដាំ (Dark Form) - រក្សា Style ខ្មៅស្អាតរបស់លោកពូ */}
+          {/* Registration Form Section */}
           <section className="rounded-4xl bg-slate-900 p-6 text-white shadow-xl md:p-8">
             <div className="mb-6">
               <h2 className="text-2xl font-bold">Create your account</h2>
@@ -191,9 +175,8 @@ export default function RegisterPage() {
               </div>
 
               <CardFooter className="flex justify-center p-0 bg-transparent border-none">
-                {/* ប្តូរមកប្រើ flex-col ដើម្បីឱ្យវាជង់លើគ្នា និង w-full ដើម្បីឱ្យប៊ូតុងរីកស្មើគ្នា */}
                 <Field className="flex flex-col gap-3 w-full items-center bg-transparent">
-                  {/* ប៊ូតុង Google */}
+                  {/* Google Sign Up */}
                   <Button
                     onClick={() => handleSocialAuth("google")}
                     variant="outline"
@@ -213,7 +196,7 @@ export default function RegisterPage() {
                     Login with Google
                   </Button>
 
-                  {/* ប៊ូតុង GitHub */}
+                  {/* GitHub Sign Up */}
                   <Button
                     onClick={() => handleSocialAuth("github")}
                     variant="outline"

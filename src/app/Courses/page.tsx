@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import CourseCard from "../components/CourseCard";
 import { courseCategories } from "@/lib/elearn-data";
@@ -8,7 +8,7 @@ import { useCourseList } from "@/lib/useCourses";
 
 const categoryFilters = ["All Categories", ...courseCategories.map((category) => category.name)];
 
-export default function CoursesPage() {
+function CoursesContent() {
   const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("All Categories");
@@ -194,5 +194,13 @@ export default function CoursesPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function CoursesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50" />}>
+      <CoursesContent />
+    </Suspense>
   );
 }

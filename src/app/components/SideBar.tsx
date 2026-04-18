@@ -1,6 +1,20 @@
 "use client";
 
-export default function SideBar({ lessons, currentLessonId, onSelectLesson }) {
+interface Lesson {
+  id: number;
+  title: string;
+  completed?: boolean;
+  duration?: string;
+  summary?: string;
+}
+
+interface SideBarProps {
+  lessons: Lesson[];
+  currentLessonId: number;
+  onSelectLesson: (id: number) => void;
+}
+
+export default function SideBar({ lessons, currentLessonId, onSelectLesson }: SideBarProps) {
   return (
     <aside className="w-85 border-r border-slate-200 bg-white h-screen sticky top-0 overflow-y-auto flex flex-col shadow-2xl z-30">
       <div className="p-8 border-b border-slate-50 bg-slate-900 text-white">

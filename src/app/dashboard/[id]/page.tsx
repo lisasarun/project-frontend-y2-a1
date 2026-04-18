@@ -5,11 +5,19 @@ import { useEffect, useMemo, useState } from "react";
 import SideBar from "../../components/SideBar";
 import LessonViewer from "../../components/LessonViewer";
 
+interface Lesson {
+  id: number;
+  title: string;
+  completed?: boolean;
+  duration?: string;
+  summary?: string;
+}
+
 export default function LearningPage() {
   const params = useParams();
   const courseId = params?.id;
-  const [lessons, setLessons] = useState([]);
-  const [currentLessonId, setCurrentLessonId] = useState(null);
+  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [currentLessonId, setCurrentLessonId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
 

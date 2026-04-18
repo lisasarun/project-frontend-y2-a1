@@ -2,7 +2,12 @@
 import { useState } from "react";
 import QuizModule from "./QuizModule";
 
-export default function LessonViewer({ lessonTitle, lessonSummary }) {
+interface LessonViewerProps {
+  lessonTitle?: string;
+  lessonSummary?: string;
+}
+
+export default function LessonViewer({ lessonTitle = "Lesson", lessonSummary }: LessonViewerProps) {
   const [showQuiz, setShowQuiz] = useState(false);
 
   return (

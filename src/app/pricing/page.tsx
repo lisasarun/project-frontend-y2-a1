@@ -132,16 +132,16 @@ export default function PricingPage() {
       </section>
 
       {/* Billing Toggle */}
-      <section className="bg-white border-b border-slate-200">
+      <section className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
         <div className="mx-auto max-w-7xl px-6 py-8">
           <div className="flex items-center justify-center">
-            <div className="flex items-center gap-4 rounded-full bg-slate-100 p-1">
+            <div className="flex items-center gap-4 rounded-full bg-slate-100 dark:bg-slate-800 p-1">
               <button
                 onClick={() => setBillingCycle("monthly")}
                 className={`rounded-full px-6 py-2 text-sm font-medium transition ${
                   billingCycle === "monthly"
-                    ? "bg-white text-slate-900 shadow-sm"
-                    : "text-slate-600 hover:text-slate-900"
+                    ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
                 Monthly
@@ -150,8 +150,8 @@ export default function PricingPage() {
                 onClick={() => setBillingCycle("yearly")}
                 className={`rounded-full px-6 py-2 text-sm font-medium transition ${
                   billingCycle === "yearly"
-                    ? "bg-white text-slate-900 shadow-sm"
-                    : "text-slate-600 hover:text-slate-900"
+                    ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
                 Yearly
