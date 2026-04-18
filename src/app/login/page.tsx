@@ -13,6 +13,7 @@ function formatDemoName(email: string) {
 }
 
 export default function LoginPage() {
+  // Login page will use system dark mode from layout
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

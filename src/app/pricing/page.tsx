@@ -115,7 +115,7 @@ export default function PricingPage() {
     <>
       
       {/* Hero Section */}
-      <section className="bg-linear-to-br from-indigo-600 via-purple-600 to-cyan-600 text-white">
+      <section className="bg-gradient-to-br from-indigo-600 via-purple-600 to-cyan-600 dark:from-indigo-900 dark:via-purple-900 dark:to-cyan-900 text-white">
         <div className="mx-auto max-w-7xl px-6 py-20">
           <div className="text-center">
             <div className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-3xl bg-white/10">

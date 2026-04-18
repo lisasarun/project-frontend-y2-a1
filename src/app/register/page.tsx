@@ -68,17 +68,17 @@ export default function RegisterPage() {
 
   return (
     <>
-      <main className="min-h-screen px-4 py-8 md:px-6">
+      <main className="min-h-screen bg-white dark:bg-slate-950 px-4 py-8 md:px-6">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           {/* Information Section */}
-          <section className="rounded-4xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
+          <section className="rounded-4xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm dark:shadow-lg md:p-8">
+            <span className="rounded-full bg-indigo-100 dark:bg-indigo-900 px-3 py-1 text-xs font-semibold text-indigo-700 dark:text-indigo-300">
               Join E-Learn
             </span>
-            <h1 className="mt-4 text-3xl font-bold text-slate-900 md:text-4xl">
+            <h1 className="mt-4 text-3xl font-bold text-slate-900 dark:text-white md:text-4xl">
               Create your professional account
             </h1>
-            <p className="mt-4 text-sm leading-7 text-slate-600">
+            <p className="mt-4 text-sm leading-7 text-slate-600 dark:text-slate-400">
               Build your profile and track progress in one place.
             </p>
           </section>
@@ -97,12 +97,12 @@ export default function RegisterPage() {
               onSubmit={handleSubmit(onSubmit)}
             >
               <div className="md:col-span-2">
-                <label className="mb-2 block text-sm font-medium text-slate-200">
+                <label className="mb-2 block text-sm font-medium text-slate-600 dark:text-slate-300">
                   Full name
                 </label>
                 <input
                   {...register("fullName")}
-                  className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none"
+                  className="w-full rounded-2xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-sm text-slate-900 dark:text-white outline-none"
                   placeholder="student"
                 />
                 {errors.fullName && (

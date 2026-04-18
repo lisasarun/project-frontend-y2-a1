@@ -72,19 +72,19 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="relative mt-auto overflow-hidden bg-slate-950 text-slate-300">
+    <footer className="relative mt-auto overflow-hidden bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 border-t border-slate-200 dark:border-white/10">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.1),transparent_50%)] bg-[radial-gradient(circle_at_70%_80%,rgba(6,182,212,0.1),transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.1),transparent_50%)] bg-[radial-gradient(circle_at_70%_80%,rgba(6,182,212,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_70%_80%,rgba(6,182,212,0.1),transparent_50%)]"></div>
 
       {/* CTA Section */}
-      <div className="relative border-b border-white/10">
+      <div className="relative border-b border-slate-200 dark:border-white/10">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
             <div className="flex-1">
-              <p className="text-sm font-semibold uppercase tracking-wider text-cyan-300">
+              <p className="text-sm font-semibold uppercase tracking-wider text-cyan-600 dark:text-cyan-300">
                 Ready to grow your skills?
               </p>
-              <h2 className="mt-2 text-2xl font-bold leading-tight text-white sm:text-3xl lg:text-4xl">
+              <h2 className="mt-2 text-2xl font-bold leading-tight text-slate-900 dark:text-white sm:text-3xl lg:text-4xl">
                 Start learning with a more professional e-learning experience
               </h2>
             </div>
@@ -101,7 +101,7 @@ export default function Footer() {
               </Link>
               <Link
                 href="/register"
-                className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50"
+                className="inline-flex items-center justify-center rounded-xl border border-slate-300 dark:border-white/20 bg-slate-50 dark:bg-white/5 px-6 py-4 text-base font-semibold text-slate-900 dark:text-white backdrop-blur-sm transition-all duration-200 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-slate-400 dark:hover:border-white/30 focus:outline-none focus:ring-2 focus:ring-slate-500 dark:focus:ring-white/50"
               >
                 Join Free
               </Link>

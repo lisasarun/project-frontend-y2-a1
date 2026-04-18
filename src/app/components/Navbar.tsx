@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 import { ModeToggle } from "./mode-toggle";
 
 const navLinks = [
-  { href: "/", label: "Home", icon: "🏠" },
-  { href: "/Courses", label: "Courses", icon: "📚" },
-  { href: "/dashboard", label: "Dashboard", icon: "📊" },
-  { href: "/certificate", label: "Certificates", icon: "🏆" },
+  { href: "/", label: "Home", icon: "" },
+  { href: "/Courses", label: "Courses", icon: "" },
+  { href: "/dashboard", label: "Dashboard", icon: "" },
+  { href: "/certificate", label: "Certificates", icon: "" },
 ];
 
 type DemoUser = {

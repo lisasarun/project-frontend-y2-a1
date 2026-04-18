@@ -23,7 +23,7 @@ export default function CertificatePage() {
   return (
     <>
       
-      <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
+      <main className="min-h-screen bg-white dark:bg-slate-950 px-4 py-8 md:px-6">
         <div className="mx-auto max-w-7xl space-y-8">
           <section className="rounded-4xl bg-linear-to-r from-slate-950 via-indigo-900 to-cyan-600 p-6 text-white shadow-xl md:p-8">
             <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-cyan-100">

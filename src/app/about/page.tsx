@@ -78,7 +78,7 @@ export default function AboutPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="bg-white py-16">
+      <section className="bg-white dark:bg-slate-900 py-16">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat, index) => (
@@ -134,7 +134,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Values Section */}
-      <section className="bg-white py-20">
+      <section className="bg-white dark:bg-slate-900 py-20">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center">
             <h2 className="text-4xl font-bold text-slate-900">Our Values</h2>
@@ -183,7 +183,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-indigo-600 py-16">
+      <section className="bg-indigo-600 dark:bg-indigo-900 py-16">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <h2 className="text-3xl font-bold text-white md:text-4xl">
             Ready to Join Our Learning Community?

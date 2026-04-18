@@ -136,7 +136,7 @@ export default function BlogPage() {
       </section>
 
       {/* Featured Posts */}
-      <section className="bg-white py-16">
+      <section className="bg-white dark:bg-slate-900 py-16">
         <div className="mx-auto max-w-7xl px-6">
           <h2 className="text-3xl font-bold text-slate-900">Featured Articles</h2>
           <div className="mt-8 grid gap-8 md:grid-cols-2">
