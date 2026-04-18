@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import Footer from "../components/Footer";
 import { CardFooter } from "@/app/components/card";
 import { Button } from "@/app/components/button";
 import { Field } from "@/app/components/field";
@@ -232,7 +231,6 @@ export default function RegisterPage() {
           </section>
         </div>
       </main>
-      <Footer />
     </>
   );
 }
