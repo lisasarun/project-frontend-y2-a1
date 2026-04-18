@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 import { ModeToggle } from "./mode-toggle";
 
 const navLinks = [
-  { href: "/", label: "Home", icon: "🏠" },
-  { href: "/Courses", label: "Courses", icon: "📚" },
-  { href: "/dashboard", label: "Dashboard", icon: "📊" },
-  { href: "/certificate", label: "Certificates", icon: "🎖️" },
+  { href: "/", label: "Home", icon: "" },
+  { href: "/Courses", label: "Courses", icon: "" },
+  { href: "/dashboard", label: "Dashboard", icon: "" },
+  { href: "/certificate", label: "Certificates", icon: "" },
 ];
 
 type DemoUser = {
@@ -95,15 +95,18 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button 
-            onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="flex lg:hidden items-center gap-2 rounded-lg p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+          {/* Mobile Actions */}
+          <div className="flex lg:hidden items-center gap-2">
+            <ModeToggle />
+            <button
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="flex items-center gap-2 rounded-lg p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
 
           {/* Right Side Actions */}
           <div className="hidden lg:flex items-center gap-3">
