@@ -10,7 +10,10 @@ export type Course = {
   id: number;
   title: string;
   level: "Beginner" | "Intermediate" | "Advanced";
+  category: string;
   track: string;
+  price: string;
+  image: string;
   mentor: string;
   rating: string;
   learners: string;
@@ -37,7 +40,11 @@ const courses: Course[] = [
     id: 1,
     title: "C++ Basics",
     level: "Beginner",
+    category: "Programming",
     track: "Programming",
+    price: "Free",
+    image:
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
     mentor: "Sarah Khan",
     rating: "4.8 ★",
     learners: "1.4k learners",
@@ -90,7 +97,11 @@ const courses: Course[] = [
     id: 2,
     title: "React Development",
     level: "Intermediate",
+    category: "Frontend",
     track: "Frontend",
+    price: "$29",
+    image:
+      "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80",
     mentor: "Daniel Lee",
     rating: "4.9 ★",
     learners: "2.1k learners",
@@ -143,7 +154,11 @@ const courses: Course[] = [
     id: 3,
     title: "Advanced Web Development",
     level: "Advanced",
+    category: "Full Stack",
     track: "Full Stack",
+    price: "$39",
+    image:
+      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80",
     mentor: "Maya Ibrahim",
     rating: "4.7 ★",
     learners: "980 learners",
@@ -191,7 +206,11 @@ const courses: Course[] = [
     id: 4,
     title: "JavaScript Essentials",
     level: "Beginner",
+    category: "Web Basics",
     track: "Web Basics",
+    price: "Free",
+    image:
+      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
     mentor: "Omar Adel",
     rating: "4.8 ★",
     learners: "1.8k learners",
@@ -234,6 +253,29 @@ const courses: Course[] = [
         summary: "Make the page interactive by updating content and responding to events.",
       },
     ],
+  },
+];
+
+export const courseCategories = [
+  {
+    name: "Programming",
+    icon: "💻",
+    description: "Build logic, algorithms, and software fundamentals.",
+  },
+  {
+    name: "Frontend",
+    icon: "🎨",
+    description: "Design responsive interfaces with real web projects.",
+  },
+  {
+    name: "Full Stack",
+    icon: "🧩",
+    description: "Own both front-end and back-end workflows.",
+  },
+  {
+    name: "Web Basics",
+    icon: "🌐",
+    description: "Start with JavaScript, HTML, and browser fundamentals.",
   },
 ];
 

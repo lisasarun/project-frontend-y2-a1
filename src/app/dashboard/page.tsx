@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import CourseCard from "../components/CourseCard";
+import ElearnSymbol from "../components/ElearnSymbol";
 import ProgressChart from "../components/ProgressChart";
 import LearningStreak from "../components/LearningStreak";
+import { getStoredEnrollments } from "@/lib/useCourses";
 
 type DashboardCourse = {
   id: number;
@@ -75,6 +77,29 @@ export default function DashboardPage() {
     let active = true;
 
     const loadDashboard = async () => {
+      const storedName = readStoredName();
+      const localCourses = getStoredEnrollments();
+
+      const buildStats = (courses: DashboardCourse[]) => {
+        const lessonsLeft = courses.reduce((total, course) => {
+          const raw = Number.parseInt(course.lessons, 10);
+          return total + (Number.isNaN(raw) ? 0 : raw);
+        }, 0);
+
+        const averageProgress = courses.length
+          ? Math.round(
+              courses.reduce((total, course) => total + course.progress, 0) /
+                courses.length
+            )
+          : 0;
+
+        return {
+          activeCourses: courses.length,
+          averageProgress,
+          lessonsLeft,
+        };
+      };
+
       try {
         const response = await fetch("/api/dashboard", { cache: "no-store" });
 
@@ -83,7 +108,7 @@ export default function DashboardPage() {
         }
 
         const data = (await response.json()) as DashboardData;
-        const storedName = readStoredName();
+        const finalCourses = localCourses.length ? localCourses : data.myCourses;
 
         if (active) {
           setDashboardData({
@@ -92,18 +117,19 @@ export default function DashboardPage() {
               ...data.user,
               name: storedName || data.user.name,
             },
+            myCourses: finalCourses,
+            stats: buildStats(finalCourses),
           });
         }
       } catch {
-        const storedName = readStoredName();
-
         if (active) {
           setDashboardData({
-            ...fallbackDashboardData,
             user: {
-              ...fallbackDashboardData.user,
               name: storedName || fallbackDashboardData.user.name,
+              membership: "Pro Student",
             },
+            myCourses: localCourses,
+            stats: buildStats(localCourses),
           });
         }
       } finally {
@@ -120,10 +146,12 @@ export default function DashboardPage() {
     };
   }, []);
 
-  const StatCard = ({ icon, value, label, color }: { icon: string; value: string | number; label: string; color: string }) => (
+  const StatCard = ({ value, label, color }: { value: string | number; label: string; color: string }) => (
     <div className={`rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm ${color}`}>
       <div className="flex items-center gap-3">
-        <div className="text-2xl">{icon}</div>
+        <div className="text-2xl">
+          <ElearnSymbol className="h-6 w-6" />
+        </div>
         <div>
           <p className="text-2xl font-bold">{value}</p>
           <p className="text-sm text-slate-200">{label}</p>
@@ -132,14 +160,14 @@ export default function DashboardPage() {
     </div>
   );
 
-  const AchievementBadge = ({ icon, title, description, earned }: { icon: string; title: string; description: string; earned: boolean }) => (
-    <div className={`rounded-xl border p-4 transition-all ${earned ? 'border-yellow-200 bg-yellow-50' : 'border-slate-200 bg-slate-50'}`}>
-      <div className="flex items-center gap-3">
-        <div className={`text-2xl ${earned ? 'text-yellow-600' : 'text-slate-400'}`}>{icon}</div>
-        <div>
-          <p className={`font-semibold ${earned ? 'text-slate-900' : 'text-slate-500'}`}>{title}</p>
-          <p className="text-sm text-slate-500">{description}</p>
-        </div>
+  const AchievementBadge = ({ title, description, earned }: { title: string; description: string; earned: boolean }) => (
+    <div className="flex items-center gap-3">
+      <div className={`text-2xl ${earned ? 'text-yellow-600' : 'text-slate-400'}`}>
+        <ElearnSymbol className="h-6 w-6" />
+      </div>
+      <div>
+        <p className={`font-semibold ${earned ? 'text-slate-900' : 'text-slate-500'}`}>{title}</p>
+        <p className="text-sm text-slate-500">{description}</p>
       </div>
     </div>
   );
@@ -149,19 +177,19 @@ export default function DashboardPage() {
       <div className="mx-auto max-w-7xl px-4 py-8 md:px-6">
         <div className="space-y-8">
           {/* Hero Section */}
-          <section className="overflow-hidden rounded-[32px] bg-linear-to-r from-slate-950 via-indigo-900 to-cyan-600 p-6 text-white shadow-xl md:p-8">
+          <section className="overflow-hidden rounded-4xl bg-linear-to-r from-slate-950 via-indigo-900 to-cyan-600 p-6 text-white shadow-xl md:p-8">
             <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="rounded-full bg-cyan-500/20 px-3 py-1 text-xs font-semibold text-cyan-100">
                     {dashboardData.user.membership}
                   </span>
-                  <span className="text-sm text-slate-300">
-                    🔥 {currentStreak} day streak
+                  <span className="text-sm text-slate-300 flex items-center gap-1">
+                    <ElearnSymbol className="h-4 w-4" /> {currentStreak} day streak
                   </span>
                 </div>
-                <h1 className="mt-3 text-3xl font-bold md:text-4xl">
-                  Welcome back, {dashboardData.user.name}! 👋
+                <h1 className="mt-3 text-3xl font-bold md:text-4xl flex items-center gap-2">
+                  Welcome back, {dashboardData.user.name}! <ElearnSymbol className="h-8 w-8" />
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-200 md:text-base">
                   Track your progress, continue your lessons, and achieve your learning goals.
@@ -182,14 +210,13 @@ export default function DashboardPage() {
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
                 <StatCard
-                  icon="📚"
                   value={dashboardData.stats.activeCourses}
                   label="Active Courses"
                   color=""
                 />
                 <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="text-2xl">📈</div>
+                    <ElearnSymbol className="h-6 w-6 text-white" />
                     <div>
                       <p className="text-2xl font-bold">{dashboardData.stats.averageProgress}%</p>
                       <p className="text-sm text-slate-200">Avg Progress</p>
@@ -202,13 +229,11 @@ export default function DashboardPage() {
                   />
                 </div>
                 <StatCard
-                  icon="🎯"
                   value={dashboardData.stats.lessonsLeft}
                   label="Lessons Left"
                   color=""
                 />
                 <StatCard
-                  icon="🏆"
                   value={currentStreak}
                   label="Day Streak"
                   color=""
@@ -227,7 +252,7 @@ export default function DashboardPage() {
               >
                 <div className="flex items-center gap-3">
                   <div className="rounded-lg bg-indigo-100 p-2 text-indigo-600 group-hover:bg-indigo-200">
-                    🔍
+                    <ElearnSymbol className="h-5 w-5" />
                   </div>
                   <div>
                     <p className="font-semibold text-slate-900">Find Courses</p>
@@ -242,7 +267,7 @@ export default function DashboardPage() {
               >
                 <div className="flex items-center gap-3">
                   <div className="rounded-lg bg-green-100 p-2 text-green-600 group-hover:bg-green-200">
-                    🏆
+                    <ElearnSymbol className="h-5 w-5" />
                   </div>
                   <div>
                     <p className="font-semibold text-slate-900">Certificates</p>
@@ -254,7 +279,7 @@ export default function DashboardPage() {
               <button className="group rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:shadow-md hover:border-purple-200">
                 <div className="flex items-center gap-3">
                   <div className="rounded-lg bg-purple-100 p-2 text-purple-600 group-hover:bg-purple-200">
-                    📊
+                    <ElearnSymbol className="h-5 w-5" />
                   </div>
                   <div>
                     <p className="font-semibold text-slate-900">Analytics</p>
@@ -266,7 +291,7 @@ export default function DashboardPage() {
               <button className="group rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:shadow-md hover:border-orange-200">
                 <div className="flex items-center gap-3">
                   <div className="rounded-lg bg-orange-100 p-2 text-orange-600 group-hover:bg-orange-200">
-                    👥
+                    <ElearnSymbol className="h-5 w-5" />
                   </div>
                   <div>
                     <p className="font-semibold text-slate-900">Study Groups</p>
@@ -282,19 +307,16 @@ export default function DashboardPage() {
             <h2 className="mb-4 text-xl font-bold text-slate-900">Recent Achievements</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <AchievementBadge
-                icon="🎯"
                 title="First Course Started"
                 description="You began your learning journey!"
                 earned={true}
               />
               <AchievementBadge
-                icon="🔥"
                 title="7 Day Streak"
                 description="Learn consistently for 7 days"
                 earned={currentStreak >= 7}
               />
               <AchievementBadge
-                icon="⭐"
                 title="Course Completed"
                 description="Finish your first course"
                 earned={dashboardData.stats.averageProgress === 100}
@@ -326,7 +348,9 @@ export default function DashboardPage() {
 
             {dashboardData.myCourses.length === 0 ? (
               <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center">
-                <div className="text-6xl">📚</div>
+                <div className="mx-auto mb-4 inline-flex h-16 w-16 items-center justify-center rounded-3xl bg-indigo-50">
+                  <ElearnSymbol className="h-10 w-10 text-indigo-600" />
+                </div>
                 <h3 className="mt-4 text-lg font-semibold text-slate-900">No active courses yet</h3>
                 <p className="mt-2 text-slate-500">Start your learning journey by enrolling in a course.</p>
                 <Link

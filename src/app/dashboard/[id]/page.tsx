@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import LessonViewer from "../../components/LessonViewer";
 import SideBar from "../../components/SideBar";
+import { getStoredEnrollment, updateCourseProgress } from "@/lib/useCourses";
 
 type LessonItem = {
   id: number;
@@ -33,6 +34,8 @@ export default function LearningPage() {
     let active = true;
 
     const loadCourse = async () => {
+      const stored = getStoredEnrollment(courseId);
+
       try {
         const response = await fetch(`/api/courses/${courseId}`, {
           cache: "no-store",
@@ -46,20 +49,26 @@ export default function LearningPage() {
           course?: { title?: string; lessonItems?: LessonItem[] };
         };
 
-        const nextLessons = data.course?.lessonItems?.length
+        const loadedLessons = data.course?.lessonItems?.length
           ? data.course.lessonItems
           : [fallbackLesson];
 
+        const nextLessons = stored?.lessonItems?.length ? stored.lessonItems : loadedLessons;
+        const nextTitle = stored?.title || data.course?.title || `Course ${courseId}`;
+
         if (active) {
-          setCourseTitle(data.course?.title || `Course ${courseId}`);
+          setCourseTitle(nextTitle);
           setLessons(nextLessons);
           setCurrentLessonId(nextLessons[0].id);
         }
       } catch {
+        const nextTitle = stored?.title || `Course ${courseId}`;
+        const nextLessons = stored?.lessonItems?.length ? stored.lessonItems : [fallbackLesson];
+
         if (active) {
-          setCourseTitle(`Course ${courseId}`);
-          setLessons([fallbackLesson]);
-          setCurrentLessonId(fallbackLesson.id);
+          setCourseTitle(nextTitle);
+          setLessons(nextLessons);
+          setCurrentLessonId(nextLessons[0].id);
         }
       } finally {
         if (active) {
@@ -81,6 +90,27 @@ export default function LearningPage() {
 
   const completedCount = lessons.filter((lesson) => lesson.completed).length;
   const progress = Math.round((completedCount / lessons.length) * 100);
+
+  const handleCompleteLesson = () => {
+    setLessons((previousLessons) => {
+      const updatedLessons = previousLessons.map((lesson) =>
+        lesson.id === currentLessonId ? { ...lesson, completed: true } : lesson
+      );
+
+      updateCourseProgress(courseId, updatedLessons);
+
+      const currentIndex = previousLessons.findIndex((lesson) => lesson.id === currentLessonId);
+      const nextLesson = previousLessons[currentIndex + 1];
+
+      if (nextLesson) {
+        setCurrentLessonId(nextLesson.id);
+      }
+
+      return updatedLessons;
+    });
+  };
+
+  const nextLesson = lessons.find((lesson) => lesson.id > currentLessonId);
 
   return (
     <div className="flex min-h-screen bg-slate-50">
@@ -124,7 +154,28 @@ export default function LearningPage() {
           <LessonViewer
             lessonTitle={currentLesson.title}
             lessonSummary={currentLesson.summary}
+            lessonNumber={lessons.findIndex((lesson) => lesson.id === currentLessonId) + 1}
+            totalLessons={lessons.length}
+            duration={currentLesson.duration}
+            isCompleted={currentLesson.completed}
+            onComplete={handleCompleteLesson}
+            onDownload={() => {
+              window.alert("Notes download coming soon — keep learning!");
+            }}
           />
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-slate-600">
+              {nextLesson ? `Ready for next: ${nextLesson.title}` : "You have reached the last lesson for now."}
+            </p>
+            <button
+              onClick={handleCompleteLesson}
+              disabled={currentLesson.completed}
+              className="rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {currentLesson.completed ? "Lesson Completed" : "Mark Lesson Complete"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const certificates = [
@@ -23,8 +22,7 @@ const certificates = [
 export default function CertificatePage() {
   return (
     <>
-      <Navbar />
-
+      
       <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
         <div className="mx-auto max-w-7xl space-y-8">
           <section className="rounded-4xl bg-linear-to-r from-slate-950 via-indigo-900 to-cyan-600 p-6 text-white shadow-xl md:p-8">

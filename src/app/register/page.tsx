@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -49,8 +48,7 @@ export default function RegisterPage() {
 
   return (
     <>
-      <Navbar />
-
+      
       <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <section className="rounded-4xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">

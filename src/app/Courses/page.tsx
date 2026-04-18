@@ -1,69 +1,27 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import CourseCard from "../components/CourseCard";
+import { courseCategories } from "@/lib/elearn-data";
+import { useCourseList } from "@/lib/useCourses";
 
-// heroooo
-type CourseSummary = {
-  id: number;
-  title: string;
-  level: string;
-  track: string;
-  mentor: string;
-  rating: string;
-  learners: string;
-  duration: string;
-  lessons: string;
-  description: string;
-};
-
-const quickFilters = [
-  "All Paths",
-  "Beginner",
-  "Intermediate",
-  "Advanced",
-  "Certificate",
-];
+const categoryFilters = ["All Categories", ...courseCategories.map((category) => category.name)];
 
 export default function CoursesPage() {
+  const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
-  const [activeFilter, setActiveFilter] = useState("All Paths");
-  const [courses, setCourses] = useState<CourseSummary[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState("All Categories");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+  const { courses, loading, error, stats } = useCourseList();
 
   useEffect(() => {
-    let active = true;
-
-    const loadCourses = async () => {
-      try {
-        const response = await fetch("/api/courses", { cache: "no-store" });
-
-        if (!response.ok) {
-          throw new Error("Failed to load courses");
-        }
-
-        const data = (await response.json()) as { courses?: CourseSummary[] };
-
-        if (active) {
-          setCourses(data.courses ?? []);
-        }
-      } catch {
-        if (active) {
-          setCourses([]);
-        }
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
-    };
-
-    void loadCourses();
-
-    return () => {
-      active = false;
-    };
-  }, []);
+    const initialSearch = searchParams.get("search") ?? "";
+    const initialCategory = searchParams.get("category") ?? "All Categories";
+    setSearch(initialSearch);
+    setActiveFilter(categoryFilters.includes(initialCategory) ? initialCategory : "All Categories");
+  }, [searchParams]);
 
   const filteredCourses = useMemo(() => {
     const query = search.toLowerCase().trim();
@@ -76,13 +34,22 @@ export default function CoursesPage() {
         );
 
       const matchesFilter =
-        activeFilter === "All Paths" ||
-        activeFilter === "Certificate" ||
-        course.level === activeFilter;
+        activeFilter === "All Categories" ||
+        course.category === activeFilter;
 
       return matchesSearch && matchesFilter;
     });
   }, [activeFilter, courses, search]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilter, search]);
+
+  const totalPages = Math.ceil(filteredCourses.length / itemsPerPage);
+  const paginatedCourses = filteredCourses.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
@@ -99,8 +66,7 @@ export default function CoursesPage() {
               </h1>
 
               <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 md:text-base">
-                Explore structured paths, hands-on projects, and mentor-led lessons
-                designed to feel like a real learning platform.
+                Explore career-ready learning paths built with clear structure, real project outcomes, and mentor-guided lessons. Every course is designed to feel like a polished classroom experience with practical skills you can use immediately.
               </p>
 
               <div className="mt-6">
@@ -116,7 +82,7 @@ export default function CoursesPage() {
 
             <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
               <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
-                <p className="text-2xl font-bold">{courses.length || "4"}</p>
+                <p className="text-2xl font-bold">{stats.total || "0"}</p>
                 <p className="mt-1 text-sm text-slate-300">active learning paths</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
@@ -124,7 +90,7 @@ export default function CoursesPage() {
                 <p className="mt-1 text-sm text-slate-300">learning access</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
-                <p className="text-2xl font-bold">4.8/5</p>
+                <p className="text-2xl font-bold">{stats.averageRating}/5</p>
                 <p className="mt-1 text-sm text-slate-300">average rating</p>
               </div>
             </div>
@@ -132,7 +98,7 @@ export default function CoursesPage() {
         </section>
 
         <div className="mt-6 flex flex-wrap gap-2">
-          {quickFilters.map((filter) => (
+          {categoryFilters.map((filter) => (
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
@@ -150,12 +116,21 @@ export default function CoursesPage() {
         <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-semibold text-slate-900">
-              {loading ? "Loading courses..." : `${filteredCourses.length} learning paths available`}
+              {loading
+                ? "Loading courses..."
+                : error
+                ? "Unable to fetch course catalog"
+                : `${filteredCourses.length} learning paths available`}
             </p>
             <p className="text-sm text-slate-500">
-              Updated dynamically for March 2026 with beginner-to-advanced tracks.
+              Browse immersive courses with clear outcomes, expert mentors, and career-focused lessons.
             </p>
           </div>
+          {!loading && totalPages > 1 && (
+            <div className="text-sm text-slate-600">
+              Page {currentPage} of {totalPages}
+            </div>
+          )}
         </div>
 
         <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -163,13 +138,16 @@ export default function CoursesPage() {
             <div className="col-span-full rounded-2xl bg-white p-6 text-center text-slate-500 shadow-sm">
               Loading course catalog...
             </div>
-          ) : filteredCourses.length > 0 ? (
-            filteredCourses.map((course) => (
+          ) : paginatedCourses.length > 0 ? (
+            paginatedCourses.map((course) => (
               <CourseCard
                 key={course.id}
                 id={course.id}
                 title={course.title}
                 level={course.level}
+                category={course.category}
+                price={course.price}
+                image={course.image}
                 description={course.description}
                 track={course.track}
                 duration={course.duration}
@@ -185,6 +163,35 @@ export default function CoursesPage() {
             </p>
           )}
         </div>
+
+        {!loading && totalPages > 1 && (
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <button
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-800 transition"
+            >
+              First Page
+            </button>
+            <button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-800 transition"
+            >
+              Previous
+            </button>
+            <span className="text-sm text-slate-600">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-800 transition"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

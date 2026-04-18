@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 
 function formatDemoName(email: string) {
   const baseName = email.split("@")[0] || "Student";
@@ -53,8 +52,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <Navbar />
-
+      
       <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <section className="rounded-4xl bg-linear-to-r from-slate-950 via-indigo-900 to-cyan-600 p-6 text-white shadow-xl md:p-8">
