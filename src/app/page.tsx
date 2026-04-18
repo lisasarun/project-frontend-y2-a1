@@ -1,4 +1,3 @@
-import Footer from "./components/Footer";
 import HeroSection from "./components/HeroSection";
 import CourseCard from "./components/CourseCard";
 import ElearnSymbol from "./components/ElearnSymbol";
@@ -203,8 +202,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </>
   );
 }

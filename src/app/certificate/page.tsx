@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Footer from "../components/Footer";
 
 const certificates = [
   {
@@ -111,8 +110,6 @@ export default function CertificatePage() {
           </section>
         </div>
       </main>
-
-      <Footer />
     </>
   );
 }
