@@ -239,8 +239,6 @@ export default function InstructorsPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </>
   );
 }

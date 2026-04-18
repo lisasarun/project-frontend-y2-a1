@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import ElearnSymbol from "../components/ElearnSymbol";
-import Footer from "../components/Footer";
 
 const contactMethods = [
   {
@@ -281,8 +280,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </>
   );
 }

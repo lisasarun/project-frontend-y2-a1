@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import ElearnSymbol from "../components/ElearnSymbol";
-import Footer from "../components/Footer";
 
 const stats = [
   { number: "10,000+", label: "Active Learners" },
@@ -207,8 +206,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </>
   );
 }

@@ -8,13 +8,8 @@ import { ModeToggle } from "./mode-toggle";
 const navLinks = [
   { href: "/", label: "Home", icon: "🏠" },
   { href: "/Courses", label: "Courses", icon: "📚" },
-  { href: "/instructors", label: "Instructors", icon: "👨‍🏫" },
-  { href: "/about", label: "About Us", icon: "ℹ️" },
-  { href: "/pricing", label: "Pricing", icon: "💰" },
-  { href: "/blog", label: "Blog", icon: "📝" },
   { href: "/dashboard", label: "Dashboard", icon: "📊" },
   { href: "/certificate", label: "Certificates", icon: "🎖️" },
-  { href: "/contact", label: "Contact", icon: "📧" },
 ];
 
 type DemoUser = {
