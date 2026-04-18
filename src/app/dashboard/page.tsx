@@ -7,6 +7,7 @@ import ProgressChart from "../components/ProgressChart";
 import LearningStreak from "../components/LearningStreak";
 import { courses } from "@/lib/elearn-data";
 import QuizModule from "../components/QuizModule";
+import Navbar from "../components/Navbar";
 
 type DashboardCourse = {
   id: number;
@@ -195,6 +196,8 @@ const StatCard = ({ icon, value, label, color }: { icon: string; value: string |
   );
 
   return (
+    <>
+    <Navbar/>
     <div className="min-h-screen bg-slate-50">
       <div className="mx-auto max-w-7xl px-4 py-8 md:px-6">
         <div className="space-y-8">
@@ -506,5 +509,6 @@ const StatCard = ({ icon, value, label, color }: { icon: string; value: string |
         </div>
       </div>
     </div>
+    </>
   );
 }

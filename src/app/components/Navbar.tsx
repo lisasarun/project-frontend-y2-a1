@@ -42,7 +42,10 @@ export default function Navbar() {
     window.addEventListener("elearn-auth-changed", syncUser as EventListener);
     return () => {
       window.removeEventListener("storage", syncUser);
-      window.removeEventListener("elearn-auth-changed", syncUser as EventListener);
+      window.removeEventListener(
+        "elearn-auth-changed",
+        syncUser as EventListener,
+      );
     };
   }, []);
 
@@ -63,7 +66,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-xl shadow-sm">
+    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-xl shadow-sm">
       <nav className="mx-auto max-w-7xl px-4 py-3 md:px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -72,8 +75,12 @@ export default function Navbar() {
               🎓
             </div>
             <div className="hidden sm:block">
-              <p className="text-lg font-bold tracking-tight text-foreground">E-Learn</p>
-              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground">Professional Academy</p>
+              <p className="text-lg font-bold tracking-tight text-foreground">
+                E-Learn
+              </p>
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                Professional Academy
+              </p>
             </div>
           </Link>
 
@@ -84,7 +91,9 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                  isActive(link.href) ? "bg-background text-primary shadow-sm" : "text-muted-foreground hover:text-primary"
+                  isActive(link.href)
+                    ? "bg-background text-primary shadow-sm"
+                    : "text-muted-foreground hover:text-primary"
                 }`}
               >
                 <span>{link.icon}</span>
@@ -103,21 +112,35 @@ export default function Navbar() {
                   <div className="h-6 w-6 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 text-[10px] text-white flex items-center justify-center font-bold">
                     {firstName.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-sm font-medium text-foreground">Hi, {firstName}</span>
+                  <span className="text-sm font-medium text-foreground">
+                    Hi, {firstName}
+                  </span>
                 </div>
-                <button onClick={handleSignOut} className="text-sm font-medium text-muted-foreground hover:text-primary">
+                <button
+                  onClick={handleSignOut}
+                  className="text-sm font-medium text-muted-foreground hover:text-primary"
+                >
                   Sign Out
                 </button>
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Link href="/login" className="hidden px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary sm:block">
+                <Link
+                  href="/login"
+                  className="hidden px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary sm:block"
+                >
                   Login
                 </Link>
-                <Link href="/register" className="hidden rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted sm:block">
+                <Link
+                  href="/register"
+                  className="hidden rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted sm:block"
+                >
                   Register
                 </Link>
-                <Link href="/Courses" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
+                <Link
+                  href="/Courses"
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 shadow-sm active:scale-95"
+                >
                   Start Learning
                 </Link>
               </div>

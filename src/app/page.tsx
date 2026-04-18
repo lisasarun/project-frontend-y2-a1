@@ -3,6 +3,7 @@ import HeroSection from "./components/HeroSection";
 import Navbar from "./components/Navbar";
 import CourseCard from "./components/CourseCard";
 import { getFeaturedCourses } from "@/lib/elearn-data";
+import { Link } from "lucide-react";
 
 export default function Home() {
   const featuredCourses = getFeaturedCourses(3);
@@ -21,12 +22,12 @@ export default function Home() {
                 Popular learning paths
               </h2>
             </div>
-            <a
+            <Link
               href="/Courses"
               className="text-sm font-semibold text-slate-600 hover:text-indigo-600"
             >
               View all courses →
-            </a>
+            </Link>
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">

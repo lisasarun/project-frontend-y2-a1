@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import CourseCard from "../components/CourseCard";
+import Navbar from "../components/Navbar";
 
 // heroooo
 type CourseSummary = {
@@ -85,6 +86,8 @@ export default function CoursesPage() {
   }, [activeFilter, courses, search]);
 
   return (
+    <>
+    <Navbar/>
     <div className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
       <div className="mx-auto max-w-7xl">
         <section className="overflow-hidden rounded-4xl bg-slate-900 px-6 py-8 text-white shadow-xl">
@@ -187,5 +190,6 @@ export default function CoursesPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
