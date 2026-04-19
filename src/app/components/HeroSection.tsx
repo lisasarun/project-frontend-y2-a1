@@ -72,23 +72,23 @@ export default function HeroSection() {
     heroData.featuredCourses ?? defaultHeroData.featuredCourses ?? [];
 
   return (
-    <section className="relative overflow-hidden bg-white py-16 sm:py-20 lg:py-24">
+    <section className="relative overflow-hidden bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-50 py-16 sm:py-20 lg:py-24">
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] xl:gap-16">
           <div className="text-center lg:text-left">
-            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm">
+            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm dark:bg-slate-800 dark:text-emerald-200">
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
               {heroData.banner.badge}
             </span>
 
-            <h1 className="mt-6 text-4xl font-bold leading-tight text-slate-900 sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 text-4xl font-bold leading-tight text-slate-900 dark:text-slate-100 sm:text-5xl lg:text-6xl">
               Distance Learning
-              <span className="block text-emerald-600">Education Center</span>
+              <span className="block text-emerald-600 dark:text-emerald-300">Education Center</span>
             </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg lg:mx-0">
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-300 sm:text-lg lg:mx-0">
               {heroData.banner.title}
             </p>
 
@@ -109,9 +109,9 @@ export default function HeroSection() {
 
             <div className="mt-12 grid gap-4 sm:grid-cols-3">
               {heroData.stats.map((item, index) => (
-                <div key={index} className="rounded-3xl border border-slate-200 bg-slate-50 p-6 text-center shadow-sm">
-                  <p className="text-3xl font-bold text-slate-900">{item.value}</p>
-                  <p className="mt-3 text-sm uppercase tracking-[0.2em] text-slate-500">
+                <div key={index} className="rounded-3xl border border-slate-200 bg-slate-50 p-6 text-center shadow-sm dark:border-slate-700 dark:bg-slate-900">
+                  <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{item.value}</p>
+                  <p className="mt-3 text-sm uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
                     {item.label}
                   </p>
                 </div>

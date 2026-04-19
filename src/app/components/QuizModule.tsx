@@ -8,8 +8,11 @@ export default function QuizModule() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/quizzes')
-      .then(res => res.json())
+    fetch('/api/quizzes')
+      .then(res => {
+        if (!res.ok) throw new Error(`Quiz API error: ${res.status}`);
+        return res.json();
+      })
       .then(data => {
         const formattedData = data.map((item: any) => ({
           id: item.id,
@@ -19,7 +22,33 @@ export default function QuizModule() {
         }));
         setQuestions(formattedData);
       })
-      .catch(err => console.error("Error fetching quizzes:", err));
+      .catch(err => {
+        console.error("Error fetching quizzes:", err);
+        setQuestions([
+          {
+            id: "fallback-1",
+            q: "Which action helps improve your learning progress?",
+            options: [
+              "Practice regularly",
+              "Skip lessons",
+              "Wait for the answer",
+              "Ignore feedback"
+            ],
+            answer: "Practice regularly"
+          },
+          {
+            id: "fallback-2",
+            q: "What should you do after finishing a lesson?",
+            options: [
+              "Review the quiz",
+              "Close the page",
+              "Do nothing",
+              "Skip the next section"
+            ],
+            answer: "Review the quiz"
+          }
+        ]);
+      });
   }, []);
 
   const handleNext = () => {

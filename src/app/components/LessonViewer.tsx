@@ -53,9 +53,9 @@ export default function LessonViewer({ lessonTitle = "Lesson", lessonSummary }: 
               </div>
             ) : (
               <div className="bg-white rounded-[2rem] border-2 border-indigo-600 p-8">
-                {/* ហៅ QuizModule មកប្រើដើម្បីទាញសំណួរពិតពី Java Backend */}
+                {/* Fetch quiz questions from the local Next.js API */}
                 <QuizModule /> 
-                
+
                 <button 
                   onClick={() => setShowQuiz(false)}
                   className="mt-4 text-sm text-slate-500 hover:text-indigo-600 underline"

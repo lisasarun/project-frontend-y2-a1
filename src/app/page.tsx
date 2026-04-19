@@ -48,10 +48,10 @@ export default function Home() {
     <>
       <HeroSection />
 
-      <section className="bg-slate-50 py-16 sm:py-20">
+      <section className="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <p className="text-sm font-semibold text-indigo-600 uppercase tracking-wider mb-2">
+            <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-300 uppercase tracking-wider mb-2">
               Explore by category
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
@@ -64,14 +64,14 @@ export default function Home() {
               <Link
                 key={category.name}
                 href={`/Courses?category=${encodeURIComponent(category.name)}`}
-                className="group rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+                className="group rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-indigo-50 text-2xl">
+                <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-indigo-50 text-2xl dark:bg-slate-800">
                   {category.icon}
                 </div>
                 <div className="mt-5">
-                  <p className="text-lg font-semibold text-slate-900">{category.name}</p>
-                  <p className="mt-2 text-sm text-slate-500">{category.description}</p>
+                  <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">{category.name}</p>
+                  <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{category.description}</p>
                 </div>
               </Link>
             ))}
@@ -80,11 +80,11 @@ export default function Home() {
       </section>
 
       {/* Intro Cards Section */}
-      <section className="bg-slate-50 py-16 sm:py-20">
+      <section className="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-6 md:grid-cols-3">
             {stats.map((stat, index) => (
-              <div key={index} className="rounded-[28px] border border-slate-200 bg-white p-8 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
+              <div key={index} className="rounded-[28px] border border-slate-200 bg-white p-8 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500 text-lg font-semibold text-white mb-4">
                   {stat.number}
                 </div>
@@ -97,14 +97,14 @@ export default function Home() {
       </section>
 
       {/* Featured Courses */}
-      <section className="bg-slate-50 py-16 sm:py-20">
+      <section className="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-sm font-semibold text-indigo-600 uppercase tracking-wider mb-2">Featured programs</p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+            <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-300 uppercase tracking-wider mb-2">Featured programs</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-slate-50 mb-4">
               Popular learning paths
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
               Start with our most popular courses, handpicked by our expert instructors.
             </p>
           </div>
@@ -145,10 +145,10 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-50 py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-slate-50 mb-4">
               Why Choose E-Learn?
             </h2>
             <p className="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto">
@@ -159,12 +159,12 @@ export default function Home() {
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {features.map((feature, index) => (
-              <div key={index} className="group text-center p-6 rounded-xl hover:bg-slate-50 transition-all duration-200 hover:shadow-lg">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-linear-to-br from-indigo-100 to-cyan-100 mb-6 group-hover:scale-110 transition-transform duration-200">
-                  <ElearnSymbol className="h-10 w-10 text-indigo-600" />
+              <div key={index} className="group text-center p-6 rounded-xl bg-white transition-all duration-200 hover:bg-slate-50 hover:shadow-lg dark:bg-slate-900 dark:hover:bg-slate-800">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-linear-to-br from-indigo-100 to-cyan-100 mb-6 group-hover:scale-110 transition-transform duration-200 dark:from-slate-800 dark:to-slate-800">
+                  <ElearnSymbol className="h-10 w-10 text-indigo-600 dark:text-indigo-300" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3">{feature.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3">{feature.title}</h3>
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
