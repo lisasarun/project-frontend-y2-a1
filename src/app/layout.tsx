@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "./components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,8 +27,20 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      // បន្ថែម suppressHydrationWarning នៅទីនេះដើម្បីកុំឱ្យលោត Error ពេលប្តូរ Theme
+      suppressHydrationWarning 
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {/* ចាប់ផ្ដើមថែម ThemeProvider នៅទីនេះបាទ */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark" 
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
